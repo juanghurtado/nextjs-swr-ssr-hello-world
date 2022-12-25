@@ -1,34 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SWR with NextJS
 
-## Getting Started
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) to illustrate my proposed usage of [SWR](https://swr.vercel.app/) within NextJS projects.
 
-First, run the development server:
+## Proposal
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Client side:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- The API is consumed through methods inside what I consider "services": `getExampleData()` in `./services(service-example-data.ts`
+- Components never call services directly. The always use custom hooks exposed by the services: `useExampleData()` in `./services(service-example-data.
+- This custom hooks use SWR under the hood
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+SSR/SSG/ISG:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Inside the `getServerSideProps()`/`getStaticProps()`, we can call the services directly: `getServerSideProps()` in `./pages/index.tsx`
+- The data returned by the service is passed to the NextJS page component within a `fallback` prop: `return` in the `getServerSideProps()` in `./pages/index.tsx`
+- This `fallback` props is passed to `SWRConfig` to init the cache in `./pages/_app.tsx`
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Benefits
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Decoupling between components and services/API
+- Decoupling between components and SWR
+- All the benefits of SWR (caching, auto-refresh…)
