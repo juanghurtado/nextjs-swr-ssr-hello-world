@@ -1,9 +1,8 @@
-import useSWR from "swr";
-import { getExampleData, getExampleDataKey } from "../../services/service-example-data";
+import { useExampleData } from "../../services/service-example-data";
 import { HomePageProps } from "./HomePage.types";
 
 const HomePage: React.FC<HomePageProps> = () => {
-    const { data, error, isLoading } = useSWR(getExampleDataKey, getExampleData);
+    const { data, error, isLoading } = useExampleData();
 
     if (error) return <p>Something went wrong</p>;
     if (!data && isLoading) return <p>Loading…</p>;
