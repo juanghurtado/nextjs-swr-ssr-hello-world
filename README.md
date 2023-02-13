@@ -4,6 +4,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Proposal
 
+![SWR Proposal](./public/swr.excalidraw.png)
+
 Client side:
 
 - The API is consumed through methods inside what I consider "services": `getExampleData()` in `./services(service-example-data.ts`
