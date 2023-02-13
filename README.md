@@ -7,8 +7,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Client side:
 
 - The API is consumed through methods inside what I consider "services": `getExampleData()` in `./services(service-example-data.ts`
-- Components never call services directly. The always use custom hooks exposed by the services: `useExampleData()` in `./services(service-example-data.
-- This custom hooks use SWR under the hood
+- Components never call services directly. The always use custom "domain" hooks: `useExampleData()`, `useAddExampleData()`… in `./hooks/api`. These "domain hooks" allow components to interact with the frontend domain API models directly
+- These custom hooks use a generic custom hook (`useAPIData()` and `useAPIMutation()` in `./hooks/api/common`) under the hood
+- These custom hooks use SWR under the hood
+
 
 SSR/SSG/ISG:
 

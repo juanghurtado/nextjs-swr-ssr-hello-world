@@ -1,12 +1,13 @@
 import { GetServerSideProps } from "next";
 import HomePage from "../features/home/HomePage";
 import { HomePageProps } from "../features/home/HomePage.types";
-import { getExampleData, getExampleDataKey } from "../services/service-example-data";
+import { getExampleDataKey } from "../hooks/api/useExampleData";
+import { ServiceExampleData } from "../services/service-example-data";
 
 export default HomePage;
 
 export const getServerSideProps: GetServerSideProps<HomePageProps> = async (context) => {
-  const exampleData = await getExampleData();
+  const exampleData = await ServiceExampleData.getAll();
 
   return {
     props: {

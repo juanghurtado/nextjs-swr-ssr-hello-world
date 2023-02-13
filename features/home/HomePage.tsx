@@ -1,10 +1,8 @@
-import { useAddExampleData, useEditExampleData, useExampleData } from "../../services/service-example-data";
+import { useHomePage } from "./HomePage.hooks";
 import { HomePageProps } from "./HomePage.types";
 
 const HomePage: React.FC<HomePageProps> = () => {
-    const { data, error, isLoading } = useExampleData();
-    const { trigger: triggerAdd } = useAddExampleData();
-    const { trigger: triggerEdit } = useEditExampleData();
+    const { data, error, isLoading, handleAddClick, handleEditClick } = useHomePage();
 
     if (error) return <p>Something went wrong</p>;
     if (!data && isLoading) return <p>Loading…</p>;
@@ -14,19 +12,15 @@ const HomePage: React.FC<HomePageProps> = () => {
         {data &&
             <ul>
                 {data.map((d) => (<li key={d.id}>
-                    {`${d.id} - ${d.text}`} <button onClick={() => triggerEdit({
-                        ...d,
-                        text: d.text + ' (edited)'
-                    })}>Edit</button>
+                    {`${d.id} - ${d.text}`} <button onClick={() => {
+                        handleEditClick(d);
+                    }}>Edit</button>
                 </li>))}
             </ul>
         }
 
         <p>
-            <button onClick={() => triggerAdd({
-                id: data && (data.length + 1) || 1,
-                text: data && (`New element ${data.length + 1}`) || 'New element 1',
-            })}>Add a new element</button>
+            <button onClick={handleAddClick}>Add a new element</button>
         </p>
     </>
     );
