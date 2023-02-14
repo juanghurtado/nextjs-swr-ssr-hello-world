@@ -1,10 +1,13 @@
-type UseAPIMutationReturn<T> = {
-    trigger: (args: unknown, opts?: UseAPIMutationOptions<T>) => Promise<T | undefined>;
+export type UseAPIMutationReturn<ExtraArg, T = ExtraArg, E = Error> = {
+  trigger: UseAPIMutationTrigger<ExtraArg, T, E>;
 };
 
-export type UseAPIMutationOptions<T> = {
-    onSuccess?: (data: T) => void;
-    onError?: (error: any) => void;
+export type UseAPIMutationOptions<ExtraArg, E> = {
+  onSuccess?: (data?: ExtraArg | void) => void;
+  onError?: (error: E) => void;
 };
 
-export type UseAPIMutation = <T>(key: string, promise: (args: any) => Promise<T>) => UseAPIMutationReturn<T>;
+export type UseAPIMutationTrigger<ExtraArg, T, E = Error> = (
+  arg: ExtraArg,
+  opts?: UseAPIMutationOptions<ExtraArg | T, E>
+) => Promise<T | undefined | void>;

@@ -1,24 +1,30 @@
-import useSWRMutation from "swr/mutation";
-import { UseAPIMutation } from "./useApiMutation.types";
+import useSWRMutation from 'swr/mutation';
+import { UseAPIMutationReturn } from './useApiMutation.types';
 
-export const useAPIMutation: UseAPIMutation = (key, promise) => {
-    const { trigger } = useSWRMutation(key, async (_, { arg }) => promise(arg));
+export const useAPIMutation = <T, E = Error, ExtraArg = T>(
+  key: string,
+  promise: (data: ExtraArg) => Promise<T | void>
+): UseAPIMutationReturn<ExtraArg, T, E> => {
+  const { trigger } = useSWRMutation<T | void | undefined, E, string, ExtraArg>(
+    key,
+    async (_, { arg }) => promise(arg)
+  );
 
-    return {
-        trigger: (arg: unknown, opts) => {
-            return trigger(arg, {
-                onSuccess: (data) => {
-                    if (opts?.onSuccess) {
-                        opts?.onSuccess(data)
-                    }
-                },
+  return {
+    trigger: (arg: ExtraArg, opts) => {
+      return trigger(arg, {
+        onSuccess: (data) => {
+          if (opts?.onSuccess) {
+            opts?.onSuccess(data);
+          }
+        },
 
-                onError: (error) => {
-                    if (opts?.onError) {
-                        opts?.onError(error)
-                    }
-                }
-            });
-        }            
+        onError: (error) => {
+          if (opts?.onError) {
+            opts?.onError(error);
+          }
+        }
+      });
     }
-}
+  };
+};

@@ -1,12 +1,16 @@
-type UseAPIDataReturn<T> = {
-    data?: T;
-    error: any;
-    isLoading: boolean;
+type UseAPIDataReturn<T, E = Error> = {
+  data?: T;
+  error: E;
+  isLoading: boolean;
 };
 
 export type UseAPIDataOptions = {
-    onSuccess?: () => void;
-    onError?: () => void;
+  onSuccess?: () => void;
+  onError?: () => void;
 };
 
-export type UseAPIData = <T>(key: string, promise: (args: any) => Promise<T>, opts?: UseAPIDataOptions) => UseAPIDataReturn<T>;
+export type UseAPIData = <T, E = Error>(
+  key: string,
+  promise: (args: E) => Promise<T>,
+  opts?: UseAPIDataOptions
+) => UseAPIDataReturn<T, E>;
